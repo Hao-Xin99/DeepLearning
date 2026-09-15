@@ -12,6 +12,9 @@ import matplotlib.pyplot as plt
 #nn是一个神经网络模块，提供了常用的神经网络层和损失函数
 #Module是一个基类，所有的神经网络模型都应该继承自这个类
 #Linear是一个全连接层，接受输入特征数和输出特征数作为参数
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 class Net(torch.nn.Module):
 
     def __init__(self):
@@ -42,6 +45,8 @@ def evaluate(test_data, net):
     n_total = 0
     with torch.no_grad():
         for (x, y) in test_data:
+            x = x.to(device)
+            y = y.to(device)
             outputs = net(x.view(-1, 28*28))
             for i, output in enumerate(outputs):
                 if torch.argmax(output) == y[i]:
@@ -59,11 +64,16 @@ def main():
     test_data = get_data_loader(is_train=False)
     net = Net()
     
+    net.to(device)
+
+
     print("initial accuracy:", evaluate(test_data, net))
     optimizer = torch.optim.Adam(net.parameters(), lr=0.001)
     for epoch in range(3):
         for (x, y) in train_data:
             net.zero_grad()
+            x = x.to(device)
+            y = y.to(device)
             output = net.forward(x.view(-1, 28*28))
             loss = torch.nn.functional.nll_loss(output, y)
             loss.backward()
@@ -74,7 +84,8 @@ def main():
     #预测一张：
     image,label=test_data.dataset[2]
     #view函数是pytorch自带的方法
-    predict=torch.argmax(net(image.view(-1,28*28)))
+    image_gpu=image.to(device)
+    predict=torch.argmax(net(image_gpu.view(-1,28*28)))
     plt.figure(0)
     plt.imshow(image.view(28,28))
     plt.title("prediction: "+str(int(predict)))
