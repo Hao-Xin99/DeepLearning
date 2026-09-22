@@ -3,7 +3,7 @@ import torch
 #2.Dataloader是一个数据加载器，用于批量加载数据
 #3. torchvision是一个计算机视觉库，提供了常用的数据集（dataset）、模型和图像处理工具
 #4.transforms是一个图像处理模块，提供了常用的图像变换操作
-#5.datasets是一个数据集模块，提供了常用的数据集类，如MNIST、CIFAR-10等
+#5.datasets是一个数据集模块，提供了常用的数据集类，如MNIST、CIFAR-10等,是用torch.utils.data里的Dataset基弄好的成品
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision.datasets import MNIST
