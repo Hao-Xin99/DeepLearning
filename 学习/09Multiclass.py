@@ -8,7 +8,7 @@ loss=(-y*np.log(y_pre)).sum()
 print(loss)
 '''
 '''
-y=torch.LongTensor([0])  #y有两种表示方式,一种是one-hot编码,只写'1'所在下标,如[1],真实:[0,1,0,0],表示第二个是对的(省内存); 一种是完整的类别标签，如[0,1,2],表示
+y=torch.LongTensor([0])  #y有两种表示方式,一种是one-hot编码,只写'1'所在下标,如[1],真实:[0,1,0,0],表示第二个是对的(省内存); 一种是完整的类别标签，如[0,1,2],表示类别
 z=torch.Tensor([[0.2,0.1,-0.1]])
 criterion=torch.nn.CrossEntropyLoss()
 loss=criterion(z,y)
@@ -23,7 +23,7 @@ import torch.nn.functional as F
 
 ##Prepare Data  数据集准备
 batch_size=64
-path_to_MINIST='C:\Users\17740\Desktop\Pytorch\学习\数据集\09MNIST'
+path_to_MINIST='C:/Users/17740/Desktop/Pytorch/学习/数据集/09MNIST'
 transform=transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.1307,),(0.3081,))
@@ -90,18 +90,22 @@ def train(epoch):
         #更新
         optimizer.step()
 
+        running_loss+=loss.item()
         if batch_idx %300 ==299:
             #每300轮更新，算平均损失
-            print('[%d,%5d] loss:%3f'% (epoch+1,batch_idx+1,running_loss/300))
+            print('[%d,%5d] loss:%.3f'% (epoch+1,batch_idx+1,running_loss/300))
             running_loss=0
 
 def test():
     correct=0
     total=0
     with torch.no_grad():
-        for (inputs,labels) in train_loader:
+        for (inputs,labels) in test_loader:
             outputs=net(inputs)
-            pred=torch.max(outputs,dim=1)
+            #outputs是（batch_size,10）两个维度，max函数输出的是两个张量构成的元组(value,indices), value:最大值的数，indices:最大值的列数 
+            #indices形状(batch_size,),batch_size行1列，与labels一致
+            #dim=0是行方向，dim=1是列，dim=1,把列压缩成一列
+            _,pred=torch.max(outputs,dim=1)  #pred是一个张量
             total+=labels.size(0)
             correct+= (pred==labels).sum().item()
     print('Accuracy:%d %%'%(100*correct/total))
