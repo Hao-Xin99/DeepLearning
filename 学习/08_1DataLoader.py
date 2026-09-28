@@ -1,8 +1,10 @@
 import numpy as np
 import torch
 from torch.utils.data import DataLoader,Dataset
-
 #加载数据集
+#Dataset是一个抽象类，继承它必须实现两个方法：__getitem__和__len__,它是用来加载数据的
+#DataLoader是用来包装Dataset的，它可以自动帮我们分批次加载数据，打乱数据集，使用多进程加载数据等。
+
 class DiabetesDataset(Dataset):
     def __init__(self,datapath):
         xy=np.loadtxt(datapath,delimiter=',',dtype=np.float32)
