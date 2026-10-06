@@ -3,4 +3,5 @@
 __pycache__/
 *.pyc
 学习/未做
-
+学习\learn_pandas.py
+学习/数据集/08_titanic/data_process.py

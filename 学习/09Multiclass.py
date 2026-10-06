@@ -19,7 +19,6 @@ print(loss)
 import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets,transforms
-import torch.nn.functional as F
 
 ##Prepare Data  数据集准备
 batch_size=64
