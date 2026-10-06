@@ -34,6 +34,9 @@ class Model(torch.nn.Module):
         self.linear3=torch.nn.Linear(4,1)
         self.sigmoid=torch.nn.Sigmoid()
 
+
+        
+
     def forward(self,x):
         x=self.sigmoid(self.linear1(x))
         x=self.sigmoid(self.linear2(x))
